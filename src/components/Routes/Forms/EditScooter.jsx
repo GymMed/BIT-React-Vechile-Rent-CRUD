@@ -11,15 +11,8 @@ import Button from "../../General/Button";
 import { useEffect, useState } from "react";
 import { useMount } from "../../General/Hooks/useMount";
 
-function AddScooter({ notifyOnAdd }) {
-    const [name, setName] = useState("");
-    const [registrationCode, setRegistrationCode] = useState("");
-    const [hourlyPrice, setHourlyPrice] = useState(0);
-    const [lastUseTime, setLastUseTime] = useState();
-    const [totalRideKilometers, setTotalRideKilometers] = useState(0);
-    const [isBusy, setIsBusy] = useState(false);
-
-    //information about inputs and statuses
+function EditScooter({ notifyOnEdit }) {
+    //Maniging state in parent(optional) InputWithStatus should keep data and state for itself
     const inputs = {
         name: {},
         registrationCode: {},
@@ -49,8 +42,7 @@ function AddScooter({ notifyOnAdd }) {
                     return;
                 }
             }
-            notifyOnAdd(inputs);
-            console.log("jaa");
+            notifyOnEdit(inputs);
         }
     }, [formValidationTrigger]);
 
@@ -61,9 +53,7 @@ function AddScooter({ notifyOnAdd }) {
                 id="name"
                 name="name"
                 type="text"
-                value={name}
                 onValidate={(value) => {
-                    setName(value);
                     const validationResult = validateSymbols(value, 2, 6);
                     inputs.name = { ...validationResult, value };
                     return validationResult;
@@ -75,9 +65,7 @@ function AddScooter({ notifyOnAdd }) {
                 id="registrationCode"
                 name="registrationCode"
                 type="text"
-                value={registrationCode}
                 onValidate={(value) => {
-                    setRegistrationCode(value);
                     const validationResult = validateRegex(
                         /[A-Z]{3}[\d]{2}/,
                         value
@@ -92,9 +80,7 @@ function AddScooter({ notifyOnAdd }) {
                 id="hourlyPrice"
                 name="hourlyPrice"
                 type="number"
-                value={hourlyPrice}
                 onValidate={(value) => {
-                    setHourlyPrice(value);
                     const validationResult = validateValue(value, 0, 100);
                     inputs.hourlyPrice = { ...validationResult, value };
                     return validationResult;
@@ -106,9 +92,7 @@ function AddScooter({ notifyOnAdd }) {
                 id="lastUseTime"
                 name="lastUseTime"
                 type="datetime-local"
-                value={lastUseTime}
                 onValidate={(value) => {
-                    setLastUseTime(value);
                     const validationResult = validateEmptyValue(value);
 
                     if (validationResult.status !== STATUSES_ENUM.Success)
@@ -129,9 +113,7 @@ function AddScooter({ notifyOnAdd }) {
                 id="totalRideKilometers"
                 name="totalRideKilometers"
                 type="number"
-                value={totalRideKilometers}
                 onValidate={(value) => {
-                    setTotalRideKilometers(value);
                     const validationResult = validateMinValue(value, 0);
                     inputs.totalRideKilometers = { ...validationResult, value };
                     return validationResult;
@@ -143,9 +125,7 @@ function AddScooter({ notifyOnAdd }) {
                 id="isBusy"
                 name="isBusy"
                 type="checkbox"
-                value={isBusy}
                 onValidate={(value) => {
-                    setIsBusy(value);
                     inputs.isBusy = {
                         status: STATUSES_ENUM.Success,
                         statusText: ``,
@@ -168,4 +148,4 @@ function AddScooter({ notifyOnAdd }) {
     );
 }
 
-export default AddScooter;
+export default EditScooter;

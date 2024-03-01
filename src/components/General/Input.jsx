@@ -20,8 +20,17 @@ export default function Input({
     id,
     name,
     status,
+    value,
     onInput = () => {},
 }) {
+    function getCheckboxValue() {
+        if (type === "checkbox") {
+            return value ?? "checked";
+        }
+
+        return "";
+    }
+
     return (
         <input
             className={
@@ -31,6 +40,8 @@ export default function Input({
             type={type}
             id={id}
             name={name}
+            value={value}
+            {...getCheckboxValue()}
             onInput={(event) => {
                 onInput(
                     type !== "checkbox"

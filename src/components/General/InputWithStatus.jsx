@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { STATUSES_ENUM } from "../../utils/enums/statusesManager";
-import { useMount } from "./hooks/useMount";
+import { useMount } from "./Hooks/useMount";
 import Input from "./Input";
 
 function getClassesBasedOnStatus(status) {
@@ -22,6 +22,7 @@ function InputWithStatus({
     id,
     name,
     type = "text",
+    value,
     onValidate = () => {},
     triggerValidation = null,
 }) {
@@ -61,6 +62,7 @@ function InputWithStatus({
                 id={id}
                 name={name}
                 type={type}
+                value={value}
                 status={input.status}
                 onInput={(value) =>
                     validateWithStatusResult(onValidate(value), value)

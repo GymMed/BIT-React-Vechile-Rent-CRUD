@@ -2,10 +2,11 @@ import { useMemo, useState } from "react";
 import Header from "../Header/Header";
 import Scooter from "../General/Scooter";
 import AddScooter from "./Forms/AddScooter";
-import ScooterStatusFilter from "../General/filters/ScooterStatusFilter";
+import ScooterStatusFilter from "../General/Filters/ScooterStatusFilter";
 import { SCOOTERS_FILTER_ENUM } from "../../utils/enums/scooterFilterEnum";
+import SubmitModal from "../General/Modals/SubmitModal";
 
-const AppName = "Kolt";
+const AppName = "Gymmed";
 
 // async function getScooters() {
 //     const promise = await fetch("/scooters.json");
@@ -19,11 +20,10 @@ export default function Root() {
     const [showFreeScooters, setShowFreeScooters] = useState(
         SCOOTERS_FILTER_ENUM.All
     );
+    const [showModal, setShowModal] = useState(false);
 
     const filteredScooters = useMemo(() => {
         return scooters.filter((scooter) => {
-            console.log("filtering");
-
             switch (showFreeScooters) {
                 case SCOOTERS_FILTER_ENUM.All:
                     return true;
@@ -65,6 +65,7 @@ export default function Root() {
             (scooter) => scooter.id !== id
         );
         console.log(filteredScooters, id);
+        setShowModal(true);
     }
 
     function addScooter(data) {
@@ -101,6 +102,9 @@ export default function Root() {
 
     return (
         <div className="w-full">
+            <SubmitModal isOpen={showModal} onClose={() => setShowModal(false)}>
+                <div>Huza</div>
+            </SubmitModal>
             <Header AppName={AppName} />
             <div className="bg-primary-50 p-10 flex justify-center flex-col gap-3">
                 <div className="flex flex-col justify-center items-center gap-10 bg-accent-100 rounded p-5">

@@ -4,7 +4,7 @@ import Button from "../Button";
 
 export default function ScooterStatusFilter({ setFilterStatus }) {
     return (
-        <div className="flex gap-3">
+        <div className="flex gap-3 max-sm:flex-col sm:flex-row md:flex-row lg:flex-row xl:flex-row max-xl:flex-row">
             <Button
                 text="Filter by Free"
                 status={STATUSES_ENUM.Success}
