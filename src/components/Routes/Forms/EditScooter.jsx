@@ -8,7 +8,7 @@ import {
 } from "../../../utils/validator";
 import { STATUSES_ENUM } from "../../../utils/enums/statusesManager";
 import { useEffect, useState } from "react";
-import { useMount } from "../../General/Hookse/useMount";
+import { useMount } from "../../General/Hooks/useMount";
 import { formatDateToInput } from "../../../utils/formater";
 
 function EditScooter({ notifyOnEdit, scooter, validateFormListener }) {
