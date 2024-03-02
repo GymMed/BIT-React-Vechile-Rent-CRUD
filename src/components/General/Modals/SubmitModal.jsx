@@ -2,7 +2,12 @@ import { useEffect, useRef, useState } from "react";
 import { STATUSES_ENUM } from "../../../utils/enums/statusesManager";
 import Button from "../Button";
 
-export default function SubmitModal({ children, onClose, isOpen = false }) {
+export default function SubmitModal({
+    children,
+    onCancel = () => {},
+    onOk = () => {},
+    isOpen = false,
+}) {
     const [isModalOpen, setModalOpen] = useState(isOpen);
     const modalRef = useRef(null);
 
@@ -30,21 +35,21 @@ export default function SubmitModal({ children, onClose, isOpen = false }) {
                         text="Ok"
                         status={STATUSES_ENUM.Success}
                         onClick={() => {
-                            if (onClose) {
-                                onClose();
+                            if (onOk) {
+                                onOk();
                             }
-                            setModalOpen(false);
+                            // setModalOpen(false);
                         }}
                     />
                     <Button
                         text="Cancel"
                         status={STATUSES_ENUM.Error}
                         onClick={() => {
-                            if (onClose) {
-                                onClose();
+                            if (onCancel) {
+                                onCancel();
                             }
 
-                            setModalOpen(false);
+                            // setModalOpen(false);
                         }}
                     />
                 </div>

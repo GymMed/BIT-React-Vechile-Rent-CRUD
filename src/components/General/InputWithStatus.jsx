@@ -37,7 +37,7 @@ function InputWithStatus({
     useEffect(() => {
         const validateInput = async () => {
             if (!isMounted) {
-                validateWithStatusResult(onValidate(input.value), input.value);
+                validateWithStatusResult(onValidate(value), value);
             }
         };
 
@@ -64,9 +64,9 @@ function InputWithStatus({
                 type={type}
                 value={value}
                 status={input.status}
-                onInput={(value) =>
-                    validateWithStatusResult(onValidate(value), value)
-                }
+                onInput={(value) => {
+                    validateWithStatusResult(onValidate(value), value);
+                }}
             />
             <div
                 className={

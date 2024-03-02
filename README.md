@@ -1,8 +1,7 @@
-# React + Vite
+# Vechile Rent React CRUD
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project is created as an example of vechile rent CRUD SPA application! Vechile rent project uses [tailwindcss](https://tailwindcss.com/), [react](https://react.dev/) and [vite](https://vitejs.dev/).
 
-Currently, two official plugins are available:
+## Project Online
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+-   [View](https://gymmed.github.io/BIT-React-Vechile-Rent-CRUD/)

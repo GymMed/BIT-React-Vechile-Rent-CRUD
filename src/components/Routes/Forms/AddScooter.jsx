@@ -50,7 +50,6 @@ function AddScooter({ notifyOnAdd }) {
                 }
             }
             notifyOnAdd(inputs);
-            console.log("jaa");
         }
     }, [formValidationTrigger]);
 
@@ -64,7 +63,7 @@ function AddScooter({ notifyOnAdd }) {
                 value={name}
                 onValidate={(value) => {
                     setName(value);
-                    const validationResult = validateSymbols(value, 2, 6);
+                    const validationResult = validateSymbols(value, 2, 12);
                     inputs.name = { ...validationResult, value };
                     return validationResult;
                 }}

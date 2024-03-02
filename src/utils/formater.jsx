@@ -10,4 +10,13 @@ function formatDateString(date) {
     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 }
 
-export { formatDateString };
+function formatDateToInput(date) {
+    const isoDateString = date.toISOString();
+
+    const datePart = isoDateString.slice(0, 10);
+    const timePart = isoDateString.slice(11, 16);
+
+    return `${datePart}T${timePart}`;
+}
+
+export { formatDateString, formatDateToInput };

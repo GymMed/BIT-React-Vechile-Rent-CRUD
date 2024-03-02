@@ -1,10 +1,12 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Header from "../Header/Header";
 import Scooter from "../General/Scooter";
 import AddScooter from "./Forms/AddScooter";
 import ScooterStatusFilter from "../General/Filters/ScooterStatusFilter";
 import { SCOOTERS_FILTER_ENUM } from "../../utils/enums/scooterFilterEnum";
 import SubmitModal from "../General/Modals/SubmitModal";
+import EditScooter from "./Forms/EditScooter";
+import EditIsBusy from "./Forms/EditIsBusy";
 
 const AppName = "Gymmed";
 
@@ -20,7 +22,13 @@ export default function Root() {
     const [showFreeScooters, setShowFreeScooters] = useState(
         SCOOTERS_FILTER_ENUM.All
     );
-    const [showModal, setShowModal] = useState(false);
+    const [showEditModal, setShowEditModal] = useState(false);
+    const [editingScooter, setEditingScooter] = useState({});
+
+    const [showIsBusyModal, setShowIsBusyModal] = useState(false);
+
+    const [validateEditForm, setValidateEditForm] = useState(false);
+    const [validateIsBusyForm, setValidateIsBusyForm] = useState(false);
 
     const filteredScooters = useMemo(() => {
         return scooters.filter((scooter) => {
@@ -37,12 +45,18 @@ export default function Root() {
         });
     }, [showFreeScooters, scooters]);
 
+    //original fetch
     // async function getAllScooters() {
     //     const fetchedScooters = await getScooters();
     //     localStorage.setItem("scooters", JSON.stringify(fetchedScooters));
     //     console.log(fetchedScooters);
     //     setScooters(fetchedScooters);
     // }
+
+    //enables local storage currently for testing reasons turned off
+    useEffect(() => {
+        localStorage.setItem("scooters", JSON.stringify(scooters));
+    }, [scooters]);
 
     function setupScooters() {
         const data = JSON.parse(localStorage.getItem("scooters") || "[]");
@@ -57,19 +71,18 @@ export default function Root() {
         );
 
         setScooters(filteredScooters);
-        // localStorage.setItem("scooters", JSON.stringify(filteredScooters));
     }
 
-    function editScooter(id) {
-        const filteredScooters = scooters.filter(
-            (scooter) => scooter.id !== id
-        );
-        console.log(filteredScooters, id);
-        setShowModal(true);
+    function startEditingScooter(id) {
+        const foundScooter = scooters.find((scooter) => scooter.id === id);
+
+        if (!foundScooter) return;
+
+        setEditingScooter(foundScooter);
+        setShowEditModal(true);
     }
 
     function addScooter(data) {
-        console.log("zdare", data, scooters);
         let currentId = localStorage.getItem("currentId") || 11;
 
         setScooters([
@@ -88,11 +101,40 @@ export default function Root() {
         localStorage.setItem("currentId", currentId + 1);
     }
 
-    function setIsBusy(scooterId, isBusyValue) {
+    function editScooter(id, data) {
+        const newEditScooter = {
+            ...editingScooter,
+            id: id,
+            title: data.name.value,
+            registrationCode: data.registrationCode.value,
+            ride: data.totalRideKilometers.value,
+            hourlyPrice: data.hourlyPrice.value,
+            lastUseTime: data.lastUseTime.value,
+            isBusy: data.isBusy.value,
+        };
+
+        setEditingScooter(newEditScooter);
+        setScooters(
+            scooters.map((scooter) => {
+                if (scooter.id !== id) {
+                    return scooter;
+                }
+                return newEditScooter;
+            })
+        );
+    }
+
+    function setIsBusy(scooterId, isBusyValue, addRide = 0) {
         setScooters((previousScooters) => {
             return previousScooters.map((scooter) => {
                 if (scooter.id === scooterId) {
-                    return { ...scooter, isBusy: isBusyValue };
+                    return {
+                        ...scooter,
+                        isBusy: isBusyValue,
+                        ride: parseFloat(
+                            parseFloat(scooter.ride) + parseFloat(addRide)
+                        ).toFixed(2),
+                    };
                 }
 
                 return scooter;
@@ -102,8 +144,40 @@ export default function Root() {
 
     return (
         <div className="w-full">
-            <SubmitModal isOpen={showModal} onClose={() => setShowModal(false)}>
-                <div>Huza</div>
+            <SubmitModal
+                isOpen={showEditModal}
+                onCancel={() => setShowEditModal(false)}
+                onOk={() => {
+                    setValidateEditForm(!validateEditForm);
+                }}
+            >
+                <EditScooter
+                    notifyOnEdit={(inputs) => {
+                        editScooter(editingScooter.id, inputs);
+                        setShowEditModal(false);
+                    }}
+                    scooter={editingScooter}
+                    validateFormListener={validateEditForm}
+                />
+            </SubmitModal>
+            <SubmitModal
+                isOpen={showIsBusyModal}
+                onCancel={() => setShowIsBusyModal(false)}
+                onOk={() => {
+                    setValidateIsBusyForm(!validateIsBusyForm);
+                }}
+            >
+                <EditIsBusy
+                    notifyOnEdit={(inputs) => {
+                        setIsBusy(
+                            editingScooter.id,
+                            !editingScooter.isBusy,
+                            inputs.ride.value
+                        );
+                        setShowIsBusyModal(false);
+                    }}
+                    validateFormListener={validateIsBusyForm}
+                />
             </SubmitModal>
             <Header AppName={AppName} />
             <div className="bg-primary-50 p-10 flex justify-center flex-col gap-3">
@@ -121,14 +195,19 @@ export default function Root() {
                                 title={scooter.title}
                                 hourlyPrice={scooter.hourlyPrice}
                                 isBusy={scooter.isBusy}
-                                setIsBusy={(value) =>
-                                    setIsBusy(scooter.id, value)
-                                }
+                                setIsBusy={(value) => {
+                                    if (value) {
+                                        setIsBusy(scooter.id, value);
+                                        return;
+                                    }
+                                    setEditingScooter(scooter);
+                                    setShowIsBusyModal(true);
+                                }}
                                 lastUseTime={scooter.lastUseTime}
                                 registrationCode={scooter.registrationCode}
                                 ride={scooter.ride}
                                 onRemove={() => removeScooter(scooter.id)}
-                                onEdit={() => editScooter(scooter.id)}
+                                onEdit={() => startEditingScooter(scooter.id)}
                             />
                         );
                     })}
