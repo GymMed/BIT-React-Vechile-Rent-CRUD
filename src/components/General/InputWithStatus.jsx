@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { STATUSES_ENUM } from "../../utils/enums/statusesManager";
-import { useMount } from "./Hooks/useMount";
+import { useMount } from "./Hookse/useMount";
 import Input from "./Input";
 
 function getClassesBasedOnStatus(status) {

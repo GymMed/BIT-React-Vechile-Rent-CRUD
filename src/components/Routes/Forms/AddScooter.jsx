@@ -9,7 +9,7 @@ import {
 import { STATUSES_ENUM } from "../../../utils/enums/statusesManager";
 import Button from "../../General/Button";
 import { useEffect, useState } from "react";
-import { useMount } from "../../General/Hooks/useMount";
+import { useMount } from "../../General/Hookse/useMount";
 
 function AddScooter({ notifyOnAdd }) {
     const [name, setName] = useState("");
