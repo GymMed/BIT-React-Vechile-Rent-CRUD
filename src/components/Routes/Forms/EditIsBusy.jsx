@@ -36,12 +36,12 @@ export default function EditIsBusy({ notifyOnEdit, validateFormListener }) {
     }
 
     useEffect(() => {
-        triggerFormValidation();
+        if (!isMounted) triggerFormValidation();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [validateFormListener]);
 
     useEffect(() => {
-        checkForErrorInInputs();
+        if (!isMounted) checkForErrorInInputs();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [formValidationTrigger]);
 
