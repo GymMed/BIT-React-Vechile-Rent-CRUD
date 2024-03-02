@@ -1,7 +1,7 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createMemoryRouter, RouterProvider } from "react-router-dom";
 import Root from "./components/Routes/Root";
 
-const router = createBrowserRouter([
+const router = createMemoryRouter([
     {
         path: "/",
         element: <Root />,
